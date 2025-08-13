@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hogar Real — Bienes Raíces</title>
+  <meta name="description" content="Compra, vende o renta tu próxima propiedad con Hogar Real. Encuentra casas, departamentos, oficinas y más." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='%23000' d='M24 136L128 48l104 88v80a8 8 0 0 1-8 8h-64v-56H96v56H32a8 8 0 0 1-8-8z'/%3E%3C/svg%3E">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="nav">
+    <a class="brand" href="#home" aria-label="Hogar Real">
+      <svg width="28" height="28" viewBox="0 0 256 256" aria-hidden="true"><path d="M24 136L128 48l104 88v80a8 8 0 0 1-8 8h-64v-56H96v56H32a8 8 0 0 1-8-8z" /></svg>
+      <span>Hogar <b>Real</b></span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="#propiedades">Propiedades</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#testimonios">Testimonios</a>
+      <a href="#contacto">Contacto</a>
+      <button class="btn-outline" id="toggle-theme" aria-label="Cambiar tema">🌓</button>
+      <a href="#propiedades" class="btn-primary">Explorar</a>
+    </nav>
+
+    <button class="nav-toggle" aria-label="Abrir menú" id="navToggle">☰</button>
+  </header>
+
+  <!-- Hero -->
+  <section id="home" class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-content container">
+      <h1><span class="accent">Encuentra</span> tu próximo hogar</h1>
+      <p>Compra, vende o renta con expertos. Listados verificados, asesoría personalizada y cierre sin estrés.</p>
+
+      <!-- Buscador rápido -->
+      <form id="buscador" class="search">
+        <input type="text" id="q" placeholder="Ciudad, colonia o código postal" aria-label="Buscar por ubicación" />
+        <select id="tipo" aria-label="Tipo de propiedad">
+          <option value="">Tipo</option>
+          <option value="Casa">Casa</option>
+          <option value="Departamento">Departamento</option>
+          <option value="Oficina">Oficina</option>
+        </select>
+        <select id="precio" aria-label="Rango de precio">
+          <option value="">Precio</option>
+          <option value="0-100000">Hasta $100k</option>
+          <option value="100000-300000">$100k – $300k</option>
+          <option value="300000-600000">$300k – $600k</option>
+          <option value="600000-9999999">$600k +</option>
+        </select>
+        <select id="recamaras" aria-label="Recámaras">
+          <option value="">Recámaras</option>
+          <option value="1">1+</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+        </select>
+        <button class="btn-primary" type="submit">Buscar</button>
+      </form>
+
+      <div class="kpis">
+        <div class="kpi"><span id="kpi-listados">150+</span><small>Propiedades activas</small></div>
+        <div class="kpi"><span>24h</span><small>Respuesta promedio</small></div>
+        <div class="kpi"><span>4.9★</span><small>Satisfacción</small></div>
+      </div>
+    </div>
+    <a href="#propiedades" class="hero-scroll" aria-label="Ir a propiedades">▼</a>
+  </section>
+
+  <!-- Propiedades -->
+  <section id="propiedades" class="section container">
+    <header class="section-head">
+      <h2>Propiedades destacadas</h2>
+      <p class="muted">Explora listados verificados. Usa los filtros para afinar tu búsqueda.</p>
+    </header>
+
+    <div id="filtrosSecundarios" class="filters">
+      <button class="chip active" data-chip="todas">Todas</button>
+      <button class="chip" data-chip="venta">En venta</button>
+      <button class="chip" data-chip="renta">En renta</button>
+      <button class="chip" data-chip="nueva">Construcción nueva</button>
+      <button class="chip" data-chip="lujo">Lujo</button>
+    </div>
+
+    <div id="grid" class="grid" aria-live="polite" aria-busy="false">
+      <!-- Tarjetas generadas por JS -->
+    </div>
+
+    <div id="paginacion" class="pagination" hidden>
+      <button class="btn-outline" data-page="prev">Anterior</button>
+      <span class="page-label">Página <b id="pageCur">1</b> de <b id="pageMax">1</b></span>
+      <button class="btn-outline" data-page="next">Siguiente</button>
+    </div>
+  </section>
+
+  <!-- Servicios -->
+  <section id="servicios" class="section alt">
+    <div class="container">
+      <header class="section-head">
+        <h2>Servicios integrales</h2>
+        <p class="muted">Desde la tasación hasta el cierre, te acompañamos en cada paso.</p>
+      </header>
+
+      <div class="services">
+        <article class="card service">
+          <div class="icon">🏠</div>
+          <h3>Compra y venta</h3>
+          <p>Negociación experta, visitas guiadas y análisis comparativo de mercado.</p>
+        </article>
+        <article class="card service">
+          <div class="icon">🧾</div>
+          <h3>Gestión legal</h3>
+          <p>Revisión de títulos, contratos y trámites ante notaría.</p>
+        </article>
+        <article class="card service">
+          <div class="icon">💸</div>
+          <h3>Crédito hipotecario</h3>
+          <p>Precalificación y vinculación con bancos para mejores tasas.</p>
+        </article>
+        <article class="card service">
+          <div class="icon">🎯</div>
+          <h3>Marketing inmobiliario</h3>
+          <p>Tour virtual, fotografía profesional y campañas multicanal.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonios -->
+  <section id="testimonios" class="section container">
+    <header class="section-head">
+      <h2>Historias reales</h2>
+      <p class="muted">Clientes que encontraron su lugar favorito.</p>
+    </header>
+
+    <div class="testimonials">
+      <figure class="testimonial card">
+        <blockquote>“Cerramos en tiempo récord y sin sorpresas. Excelente equipo.”</blockquote>
+        <figcaption>— Daniela R.</figcaption>
+      </figure>
+      <figure class="testimonial card">
+        <blockquote>“El tour virtual nos ahorró semanas. ¡Súper recomendado!”</blockquote>
+        <figcaption>— Luis y Mar</figcaption>
+      </figure>
+      <figure class="testimonial card">
+        <blockquote>“Encontraron justo lo que buscaba dentro de mi presupuesto.”</blockquote>
+        <figcaption>— Óscar A.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contacto" class="section alt">
+    <div class="container">
+      <header class="section-head">
+        <h2>Hablemos</h2>
+        <p class="muted">Agenda una visita o solicita una valuación gratuita.</p>
+      </header>
+
+      <form id="contactForm" class="contact card" novalidate>
+        <div class="row">
+          <label>Nombre
+            <input type="text" name="nombre" required />
+          </label>
+          <label>Correo
+            <input type="email" name="correo" required />
+          </label>
+        </div>
+        <div class="row">
+          <label>Teléfono
+            <input type="tel" name="telefono" />
+          </label>
+          <label>Interés
+            <select name="interes" required>
+              <option value="">Selecciona…</option>
+              <option>Comprar</option>
+              <option>Vender</option>
+              <option>Rentar</option>
+              <option>Valuación</option>
+            </select>
+          </label>
+        </div>
+        <label>Mensaje
+          <textarea name="mensaje" rows="4" required></textarea>
+        </label>
+
+        <div class="form-actions">
+          <label class="check">
+            <input type="checkbox" name="acepto" required />
+            <span>Acepto la política de privacidad</span>
+          </label>
+          <button class="btn-primary" type="submit">Enviar</button>
+        </div>
+
+        <p id="formMsg" class="form-msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand brand-invert" href="#home">
+          <svg width="24" height="24" viewBox="0 0 256 256"><path d="M24 136L128 48l104 88v80a8 8 0 0 1-8 8h-64v-56H96v56H32a8 8 0 0 1-8-8z"/></svg>
+          <span>Hogar <b>Real</b></span>
+        </a>
+        <p class="muted">Tu aliado inmobiliario de confianza.</p>
+      </div>
+      <nav>
+        <h4>Explorar</h4>
+        <a href="#propiedades">Propiedades</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#testimonios">Testimonios</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <div>
+        <h4>Contacto</h4>
+        <p>+52 55 0000 0000</p>
+        <p>hola@hogarreal.com</p>
+        <p>CDMX, México</p>
+      </div>
+      <div>
+        <h4>Boletín</h4>
+        <form id="newsletter" class="newsletter">
+          <input type="email" placeholder="Tu correo" aria-label="Correo para boletín" required />
+          <button class="btn-outline" type="submit">Suscribirme</button>
+        </form>
+      </div>
+    </div>
+    <div class="subfooter">
+      <small>© <span id="year"></span> Hogar Real. Todos los derechos reservados.</small>
+      <small><a href="#" class="muted">Privacidad</a> • <a href="#" class="muted">Términos</a></small>
+    </div>
+  </footer>
+
+  <!-- Modal detalle -->
+  <dialog id="detalleModal" class="modal">
+    <form method="dialog" class="modal-card">
+      <button class="modal-close" aria-label="Cerrar">✕</button>
+      <div class="modal-media">
+        <img id="modalImg" alt="Imagen de la propiedad" />
+      </div>
+      <div class="modal-body">
+        <h3 id="modalTitulo"></h3>
+        <p id="modalUbicacion" class="muted"></p>
+        <div id="modalBadges" class="badges"></div>
+        <p id="modalDesc"></p>
+        <div class="modal-actions">
+          <button class="btn-outline" id="btnTour" type="button">Tour virtual</button>
+          <a class="btn-primary" id="btnContactar" href="#contacto">Contactar</a>
+          <button class="btn-fav" id="btnFav" type="button" aria-pressed="false">♡</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
