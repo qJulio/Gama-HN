@@ -16,7 +16,7 @@
   <header class="nav">
     <a class="brand" href="#home" aria-label="GamaHN">
       <svg width="28" height="28" viewBox="0 0 256 256" aria-hidden="true"><path d="M24 136L128 48l104 88v80a8 8 0 0 1-8 8h-64v-56H96v56H32a8 8 0 0 1-8-8z" /></svg>
-      <span>Hogar <b>Real</b></span>
+      <span>Gama <b>HN</b></span>
     </a>
 
     <nav class="nav-links">
@@ -49,10 +49,10 @@
         </select>
         <select id="precio" aria-label="Rango de precio">
           <option value="">Precio</option>
-          <option value="0-100000">Hasta $100k</option>
-          <option value="100000-300000">$100k – $300k</option>
-          <option value="300000-600000">$300k – $600k</option>
-          <option value="600000-9999999">$600k +</option>
+          <option value="0-100000">Hasta L.100k</option>
+          <option value="100000-300000">L.100k – L.300k</option>
+          <option value="300000-600000">L.300k – L.600k</option>
+          <option value="600000-9999999">L.600k +</option>
         </select>
         <select id="recamaras" aria-label="Recámaras">
           <option value="">Recámaras</option>
@@ -168,99 +168,48 @@
           <label>Nombre
             <input type="text" name="nombre" required />
           </label>
-          <label>Correo
-            <input type="email" name="correo" required />
-          </label>
-        </div>
-        <div class="row">
-          <label>Teléfono
-            <input type="tel" name="telefono" />
-          </label>
-          <label>Interés
-            <select name="interes" required>
-              <option value="">Selecciona…</option>
-              <option>Comprar</option>
-              <option>Vender</option>
-              <option>Rentar</option>
-              <option>Valuación</option>
-            </select>
+          <label>Email
+            <input type="email" name="email" required />
           </label>
         </div>
         <label>Mensaje
           <textarea name="mensaje" rows="4" required></textarea>
         </label>
-
-        <div class="form-actions">
-          <label class="check">
-            <input type="checkbox" name="acepto" required />
-            <span>Acepto la política de privacidad</span>
-          </label>
-          <button class="btn-primary" type="submit">Enviar</button>
-        </div>
-
-        <p id="formMsg" class="form-msg" role="status" aria-live="polite"></p>
+        <button type="submit" class="btn-primary">Enviar</button>
+        <p id="formSuccess" class="success" hidden>Mensaje enviado. Gracias por contactarnos.</p>
       </form>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
-    <div class="container footer-grid">
-      <div>
-        <a class="brand brand-invert" href="#home">
-          <svg width="24" height="24" viewBox="0 0 256 256"><path d="M24 136L128 48l104 88v80a8 8 0 0 1-8 8h-64v-56H96v56H32a8 8 0 0 1-8-8z"/></svg>
-          <span>Hogar <b>Real</b></span>
-        </a>
-        <p class="muted">Tu aliado inmobiliario de confianza.</p>
-      </div>
-      <nav>
-        <h4>Explorar</h4>
-        <a href="#propiedades">Propiedades</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#testimonios">Testimonios</a>
-        <a href="#contacto">Contacto</a>
-      </nav>
-      <div>
-        <h4>Contacto</h4>
-        <p>+504 3344 7634</p>
-        <p></p>
-        <p>Tegucigalpa, Honduras</p>
-      </div>
-      <div>
-        <h4>Boletín</h4>
-        <form id="newsletter" class="newsletter">
-          <input type="email" placeholder="Tu correo" aria-label="Correo para boletín" required />
-          <button class="btn-outline" type="submit">Suscribirme</button>
-        </form>
-      </div>
-    </div>
-    <div class="subfooter">
-      <small>© <span id="year"></span> GamaHN. Todos los derechos reservados.</small>
-      <small><a href="#" class="muted">Privacidad</a> • <a href="#" class="muted">Términos</a></small>
+    <div class="container">
+      <p>&copy; 2025 GamaHN. Todos los derechos reservados.</p>
     </div>
   </footer>
 
-  <!-- Modal detalle -->
-  <dialog id="detalleModal" class="modal">
-    <form method="dialog" class="modal-card">
-      <button class="modal-close" aria-label="Cerrar">✕</button>
-      <div class="modal-media">
-        <img id="modalImg" alt="Imagen de la propiedad" />
-      </div>
-      <div class="modal-body">
-        <h3 id="modalTitulo"></h3>
-        <p id="modalUbicacion" class="muted"></p>
-        <div id="modalBadges" class="badges"></div>
-        <p id="modalDesc"></p>
-        <div class="modal-actions">
-          <button class="btn-outline" id="btnTour" type="button">Tour virtual</button>
-          <a class="btn-primary" id="btnContactar" href="#contacto">Contactar</a>
-          <button class="btn-fav" id="btnFav" type="button" aria-pressed="false">♡</button>
-        </div>
-      </div>
-    </form>
-  </dialog>
+  <script>
+    // Guardar mensajes en localStorage
+    const form = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
 
-  <script src="app.js"></script>
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const nombre = form.nombre.value.trim();
+      const email = form.email.value.trim();
+      const mensaje = form.mensaje.value.trim();
+
+      if (!nombre || !email || !mensaje) return;
+
+      const mensajes = JSON.parse(localStorage.getItem('mensajes') || '[]');
+      mensajes.push({ nombre, email, mensaje, fecha: new Date().toISOString() });
+      localStorage.setItem('mensajes', JSON.stringify(mensajes));
+
+      form.reset();
+      formSuccess.hidden = false;
+
+      setTimeout(() => formSuccess.hidden = true, 3000);
+    });
+  </script>
 </body>
 </html>

@@ -194,4 +194,5 @@ body{
   .footer-grid{grid-template-columns:1fr 1fr}
   .nav-links{display:none}
   .nav-toggle{display:inline-block}
+  
 }

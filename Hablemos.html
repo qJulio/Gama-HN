@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hablemos - Panel de Clientes</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4; }
+  header { background:#333; color:#fff; padding:1rem; text-align:center; }
+  main { padding:1rem; max-width:900px; margin:0 auto; }
+  h1 { margin-bottom:1rem; }
+  form { background:#fff; padding:1rem; border-radius:5px; margin-bottom:2rem; box-shadow:0 2px 5px rgba(0,0,0,.1);}
+  form input, form textarea { width:100%; padding:.5rem; margin-bottom:1rem; border:1px solid #ccc; border-radius:3px; }
+  form button { padding:.5rem 1rem; background:#333; color:#fff; border:none; border-radius:3px; cursor:pointer; }
+  form button:hover { background:#555; }
+  .msg-list { list-style:none; padding:0; }
+  .msg-list li { background:#fff; padding:1rem; margin-bottom:1rem; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,.1); position: relative; }
+  .msg-list li span { display:block; font-weight:bold; margin-bottom:.5rem; }
+  .msg-list li small { display:block; color:#666; font-size:.85rem; margin-bottom:.5rem; }
+  .btn-borrar { position: absolute; top:1rem; right:1rem; padding:0.3rem 0.6rem; background:#e74c3c; color:#fff; border:none; border-radius:3px; cursor:pointer; }
+  .btn-borrar:hover { background:#c0392b; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Panel de Mensajes - Hablemos</h1>
+</header>
+
+<main>
+  <h2>Mensajes recibidos:</h2>
+  <ul id="msgList" class="msg-list"></ul>
+</main>
+
+<script>
+  // Cargar todos los mensajes guardados en localStorage
+  let mensajes = JSON.parse(localStorage.getItem('mensajes') || '[]');
+  const msgList = document.getElementById('msgList');
+
+  // Render de mensajes con botón de borrar
+  function renderMensajes() {
+    msgList.innerHTML = '';
+    if (mensajes.length === 0) {
+      msgList.innerHTML = '<li>No hay mensajes.</li>';
+      return;
+    }
+
+    mensajes.forEach((m, i) => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span>${m.nombre}</span>
+        <small>${m.email}</small>
+        <p>${m.mensaje}</p>
+        <button class="btn-borrar" data-index="${i}">Borrar</button>
+      `;
+      msgList.appendChild(li);
+    });
+
+    // Agregar eventos a los botones de borrar
+    const botones = document.querySelectorAll('.btn-borrar');
+    botones.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const index = parseInt(e.target.getAttribute('data-index'));
+        if (confirm('¿Deseas borrar este mensaje?')) {
+          mensajes.splice(index, 1); // eliminar mensaje del array
+          localStorage.setItem('mensajes', JSON.stringify(mensajes)); // actualizar localStorage
+          renderMensajes(); // volver a renderizar
+        }
+      });
+    });
+  }
+
+  // Inicializar render
+  renderMensajes();
+
+  // Escuchar cambios en localStorage desde index.html
+  window.addEventListener('storage', (event) => {
+    if(event.key === 'mensajes'){
+      mensajes = JSON.parse(event.newValue || '[]');
+      renderMensajes();
+    }
+  });
+</script>
+
+</body>
+</html>
