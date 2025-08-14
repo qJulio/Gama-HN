@@ -186,30 +186,52 @@
       <p>&copy; 2025 GamaHN. Todos los derechos reservados.</p>
     </div>
   </footer>
+<script>
+const form = document.getElementById('contactForm');
+const formSuccess = document.getElementById('formSuccess');
 
-  <script>
-    // Guardar mensajes en localStorage
-    const form = document.getElementById('contactForm');
-    const formSuccess = document.getElementById('formSuccess');
+// Pega aquí la URL de tu Web App de Google Apps Script
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx_eilV5-EXm4f43wWjmoY4RCqzmG36RtwbSRepHo1ombDq0_mxqKrWcP3x42pWicei/exec";
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
+form.addEventListener('submit', async e => {
+  e.preventDefault();
 
-      const nombre = form.nombre.value.trim();
-      const email = form.email.value.trim();
-      const mensaje = form.mensaje.value.trim();
+  const nombre = form.nombre.value.trim();
+  const email = form.email.value.trim();
+  const mensaje = form.mensaje.value.trim();
 
-      if (!nombre || !email || !mensaje) return;
+  if (!nombre || !email || !mensaje) {
+    alert("Por favor completa todos los campos.");
+    return;
+  }
 
-      const mensajes = JSON.parse(localStorage.getItem('mensajes') || '[]');
-      mensajes.push({ nombre, email, mensaje, fecha: new Date().toISOString() });
-      localStorage.setItem('mensajes', JSON.stringify(mensajes));
+  // Preparamos los datos para enviar
+  const data = new FormData();
+  data.append("nombre", nombre);
+  data.append("email", email);
+  data.append("mensaje", mensaje);
 
+  try {
+    const response = await fetch(WEB_APP_URL, {
+      method: "POST",
+      body: data
+    });
+
+    const result = await response.json();
+
+    if (result.status === "success") {
       form.reset();
       formSuccess.hidden = false;
-
       setTimeout(() => formSuccess.hidden = true, 3000);
-    });
-  </script>
+    } else {
+      alert("Error al enviar: " + result.message);
+    }
+
+  } catch (error) {
+    console.error(error);
+    alert("No se pudo enviar el mensaje. Intenta de nuevo.");
+  }
+});
+</script>
 </body>
 </html>

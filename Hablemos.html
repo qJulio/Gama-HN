@@ -33,12 +33,11 @@
 </main>
 
 <script>
-  // Cargar todos los mensajes guardados en localStorage
-  let mensajes = JSON.parse(localStorage.getItem('mensajes') || '[]');
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxruWsZMKc0VimmxhYuIQBxAgwFhhcQdey7FqymujApdURavXSbz1ikQf9DAoxS3gjG/exec"; // misma URL que usaste en index.html
   const msgList = document.getElementById('msgList');
 
-  // Render de mensajes con botón de borrar
-  function renderMensajes() {
+  // Función para renderizar mensajes
+  function renderMensajes(mensajes) {
     msgList.innerHTML = '';
     if (mensajes.length === 0) {
       msgList.innerHTML = '<li>No hay mensajes.</li>';
@@ -50,37 +49,27 @@
       li.innerHTML = `
         <span>${m.nombre}</span>
         <small>${m.email}</small>
+        <small>Fecha: ${m.fecha}</small>
         <p>${m.mensaje}</p>
-        <button class="btn-borrar" data-index="${i}">Borrar</button>
       `;
       msgList.appendChild(li);
     });
-
-    // Agregar eventos a los botones de borrar
-    const botones = document.querySelectorAll('.btn-borrar');
-    botones.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const index = parseInt(e.target.getAttribute('data-index'));
-        if (confirm('¿Deseas borrar este mensaje?')) {
-          mensajes.splice(index, 1); // eliminar mensaje del array
-          localStorage.setItem('mensajes', JSON.stringify(mensajes)); // actualizar localStorage
-          renderMensajes(); // volver a renderizar
-        }
-      });
-    });
   }
 
-  // Inicializar render
-  renderMensajes();
-
-  // Escuchar cambios en localStorage desde index.html
-  window.addEventListener('storage', (event) => {
-    if(event.key === 'mensajes'){
-      mensajes = JSON.parse(event.newValue || '[]');
-      renderMensajes();
+  // Función para obtener mensajes desde Google Sheets
+  async function fetchMensajes() {
+    try {
+      const response = await fetch(WEB_APP_URL + "?action=get");
+      const mensajes = await response.json();
+      renderMensajes(mensajes);
+    } catch (error) {
+      console.error("Error al cargar los mensajes:", error);
+      msgList.innerHTML = '<li>No se pudieron cargar los mensajes.</li>';
     }
-  });
-</script>
+  }
 
+  // Llamar a la función al cargar la página
+  fetchMensajes();
+</script>
 </body>
 </html>

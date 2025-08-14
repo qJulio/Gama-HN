@@ -314,3 +314,29 @@ $("#year").textContent = new Date().getFullYear();
 // Render inicial
 applyFilters();
 render(PROPS);
+const form = document.getElementById("contactForm");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const data = new FormData(form);
+
+  const url = "https://script.google.com/macros/s/AKfycbxruWsZMKc0VimmxhYuIQBxAgwFhhcQdey7FqymujApdURavXSbz1ikQf9DAoxS3gjG/exec"; // Pega aquí la URL del web app
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      body: data
+    });
+    const json = await res.json();
+    if (json.status === "success") {
+      alert("¡Mensaje enviado con éxito!");
+      form.reset();
+    } else {
+      alert("Error: " + json.message);
+    }
+  } catch (err) {
+    alert("Error al enviar, intenta de nuevo.");
+    console.error(err);
+  }
+});
