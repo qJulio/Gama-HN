@@ -3,7 +3,7 @@ const PROPS = [
   {
     id: 1,
     titulo: "Casa moderna con jardín",
-    ciudad: "CDMX",
+    ciudad: "TEGUCIGALPA",
     tipo: "Casa",
     operacion: "venta",
     recamaras: 3,
@@ -18,7 +18,7 @@ const PROPS = [
   {
     id: 2,
     titulo: "Departamento céntrico",
-    ciudad: "Monterrey",
+    ciudad: "TEGUCIGALPA",
     tipo: "Departamento",
     operacion: "renta",
     recamaras: 2,
@@ -33,7 +33,7 @@ const PROPS = [
   {
     id: 3,
     titulo: "Penthouse de lujo con roof",
-    ciudad: "Guadalajara",
+    ciudad: "TEGUCIGALPA",
     tipo: "Departamento",
     operacion: "venta",
     recamaras: 4,
@@ -48,7 +48,7 @@ const PROPS = [
   {
     id: 4,
     titulo: "Oficina lista para entrar",
-    ciudad: "CDMX",
+    ciudad: "TEGUCIGALPA",
     tipo: "Oficina",
     operacion: "renta",
     recamaras: 0,
@@ -63,7 +63,7 @@ const PROPS = [
   {
     id: 5,
     titulo: "Residencia con alberca",
-    ciudad: "Querétaro",
+    ciudad: "TEGUCIGALPA",
     tipo: "Casa",
     operacion: "venta",
     recamaras: 4,
@@ -78,7 +78,7 @@ const PROPS = [
   {
     id: 6,
     titulo: "Loft minimalista",
-    ciudad: "CDMX",
+    ciudad: "TEGUCIGALPA",
     tipo: "Departamento",
     operacion: "renta",
     recamaras: 1,
