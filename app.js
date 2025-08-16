@@ -23,21 +23,23 @@ const formatMoney=v=>(v>=10000?`$${v.toLocaleString()}`:`$${v}`);
 // ==== Cargar propiedades desde Google Sheets ====
 async function loadPropsFromSheet(){
     try{
-        const res = await fetch("https://script.google.com/macros/s/AKfycbx3fs3ZxRv0pnOzyfDWb-EnX-9WjWgvNVL1asfdVFt0cLIRyeLEYUy2n65xVWRuXwG4/exec"); // <-- reemplaza con tu URL
+        const res = await fetch("https://script.google.com/macros/s/AKfycbyKHTJ2INNTfflKKio1yBzkEn9kYzDGTOLmHLYcTjZmsGqBBBS85__vkpIzcaDgkeQe/exec");
         const data = await res.json();
+
+        // Mapear columnas a objetos
         state.PROPS = data.map(p=>({
             id: Number(p.id),
             titulo: p.titulo || "",
             ciudad: p.ciudad || "",
             tipo: p.tipo || "",
             operacion: p.operacion || "",
-            recamaras: Number(p.recamaras||0),
-            banos: Number(p.banos||0),
-            m2: Number(p.m2||0),
-            precio: Number(p.precio||0),
-            nueva: (p.nueva||"FALSE")==="TRUE",
-            lujo: (p.lujo||"FALSE")==="TRUE",
-            Airbnb: (p.airbnb||"FALSE")==="TRUE",
+            recamaras: Number(p.recamaras || 0),
+            banos: Number(p.banos || 0),
+            m2: Number(p.m2 || 0),
+            precio: Number(p.precio || 0),
+            nueva: (p.nueva || "FALSE")==="TRUE",
+            lujo: (p.lujo || "FALSE")==="TRUE",
+            Airbnb: (p.Airbnb || "FALSE")==="TRUE",
             img: p.img || "",
             desc: p.desc || ""
         }));
@@ -52,6 +54,7 @@ function render(props){
     grid.innerHTML="";
     const start=(state.page-1)*state.pageSize;
     const slice=props.slice(start,start+state.pageSize);
+
     slice.forEach(p=>{
         const card=document.createElement("article");
         card.className="card prop reveal";
@@ -70,77 +73,77 @@ function render(props){
         grid.appendChild(card);
     });
 
-    const totalPages=Math.max(1,Math.ceil(props.length/state.pageSize));
-    pageCur.textContent=state.page;
-    pageMax.textContent=totalPages;
-    paginacion.hidden = totalPages<=1;
+    const totalPages = Math.max(1, Math.ceil(props.length/state.pageSize));
+    pageCur.textContent = state.page;
+    pageMax.textContent = totalPages;
+    paginacion.hidden = totalPages <= 1;
 }
 
 // ==== Filtros ====
 function applyFilters(){
     const q=state.query.toLowerCase();
-    let res=state.PROPS.filter(p=>{
-        let matchQ=!q||[p.ciudad,p.titulo].join(" ").toLowerCase().includes(q);
-        let matchTipo=!state.tipo||p.tipo===state.tipo;
-        let matchRec=!state.recamaras||p.recamaras>=Number(state.recamaras);
-        let matchPrecio=true;
+    let res = state.PROPS.filter(p=>{
+        let matchQ = !q || [p.ciudad,p.titulo].join(" ").toLowerCase().includes(q);
+        let matchTipo = !state.tipo || p.tipo===state.tipo;
+        let matchRec = !state.recamaras || p.recamaras >= Number(state.recamaras);
+        let matchPrecio = true;
         if(state.precio){
-            const [min,max]=state.precio.split("-").map(Number);
-            matchPrecio=p.precio>=min&&p.precio<=max;
+            const [min,max] = state.precio.split("-").map(Number);
+            matchPrecio = p.precio >= min && p.precio <= max;
         }
-        let matchChip=true;
-        if(state.chip==="venta") matchChip=p.operacion==="venta";
-        if(state.chip==="renta") matchChip=p.operacion==="renta";
-        if(state.chip==="nueva") matchChip=p.nueva;
-        if(state.chip==="lujo") matchChip=p.lujo;
-        if(state.chip==="airbnb") matchChip=p.Airbnb;
-        return matchQ&&matchTipo&&matchRec&&matchPrecio&&matchChip;
+        let matchChip = true;
+        if(state.chip==="venta") matchChip = p.operacion==="venta";
+        if(state.chip==="renta") matchChip = p.operacion==="renta";
+        if(state.chip==="nueva") matchChip = p.nueva;
+        if(state.chip==="lujo") matchChip = p.lujo;
+        if(state.chip==="airbnb") matchChip = p.Airbnb;
+        return matchQ && matchTipo && matchRec && matchPrecio && matchChip;
     });
-    state.page=1;
+    state.page = 1;
     render(res);
     return res;
 }
 
 // ==== Eventos filtros ====
-$("#buscador").addEventListener("submit",e=>{
+$("#buscador").addEventListener("submit", e=>{
     e.preventDefault();
-    state.query=$("#q").value.trim();
-    state.tipo=$("#tipo").value;
-    state.precio=$("#precio").value;
-    state.recamaras=$("#recamaras").value;
+    state.query = $("#q").value.trim();
+    state.tipo = $("#tipo").value;
+    state.precio = $("#precio").value;
+    state.recamaras = $("#recamaras").value;
     applyFilters();
 });
 
-$("#filtrosSecundarios").addEventListener("click",e=>{
-    const chip=e.target.closest(".chip");
+$("#filtrosSecundarios").addEventListener("click", e=>{
+    const chip = e.target.closest(".chip");
     if(!chip) return;
     $$(".chip").forEach(c=>c.classList.remove("active"));
     chip.classList.add("active");
-    state.chip=chip.dataset.chip;
+    state.chip = chip.dataset.chip;
     applyFilters();
 });
 
-$("#paginacion").addEventListener("click",e=>{
-    const btn=e.target.closest("button");
+$("#paginacion").addEventListener("click", e=>{
+    const btn = e.target.closest("button");
     if(!btn) return;
-    const total=Math.max(1,Math.ceil(applyFilters().length/state.pageSize));
+    const total = Math.max(1, Math.ceil(applyFilters().length/state.pageSize));
     if(btn.dataset.page==="prev") state.page=Math.max(1,state.page-1);
     if(btn.dataset.page==="next") state.page=Math.min(total,state.page+1);
     render(applyFilters());
 });
 
 // ==== Modal y favoritos ====
-grid.addEventListener("click",e=>{
-    const btnD=e.target.closest("[data-detalle]");
-    const btnF=e.target.closest("[data-fav]");
+grid.addEventListener("click", e=>{
+    const btnD = e.target.closest("[data-detalle]");
+    const btnF = e.target.closest("[data-fav]");
     if(btnD){
-        const id=Number(btnD.dataset.detalle);
-        const p=state.PROPS.find(x=>x.id===id);
+        const id = Number(btnD.dataset.detalle);
+        const p = state.PROPS.find(x=>x.id===id);
         if(!p) return;
-        $("#modalImg").src=p.img;
-        $("#modalTitulo").textContent=p.titulo;
-        $("#modalUbicacion").textContent=`${p.ciudad} • ${p.tipo}`;
-        $("#modalBadges").innerHTML=`
+        $("#modalImg").src = p.img;
+        $("#modalTitulo").textContent = p.titulo;
+        $("#modalUbicacion").textContent = `${p.ciudad} • ${p.tipo}`;
+        $("#modalBadges").innerHTML = `
             <span>${p.recamaras} rec</span>
             <span>${p.banos} baños</span>
             <span>${p.m2} m²</span>
@@ -149,22 +152,22 @@ grid.addEventListener("click",e=>{
             ${p.lujo?"<span>Lujo</span>":""}
             ${p.Airbnb?"<span>Airbnb</span>":""}
         `;
-        $("#modalDesc").textContent=p.desc;
+        $("#modalDesc").textContent = p.desc;
         modal.showModal();
     }
-    if(btnF) toggleFav(Number(btnF.dataset.fav),btnF);
+    if(btnF) toggleFav(Number(btnF.dataset.fav), btnF);
 });
 
-$(".modal-close").addEventListener("click",()=>modal.close());
+$(".modal-close").addEventListener("click", ()=>modal.close());
 
-function toggleFav(id,el){
+function toggleFav(id, el){
     if(state.favoritos.has(id)) state.favoritos.delete(id);
     else state.favoritos.add(id);
-    localStorage.setItem("favoritos",JSON.stringify([...state.favoritos]));
+    localStorage.setItem("favoritos", JSON.stringify([...state.favoritos]));
     if(el){
-        const fav=state.favoritos.has(id);
-        el.textContent=fav?"♥":"♡";
-        el.setAttribute("aria-pressed",fav);
+        const fav = state.favoritos.has(id);
+        el.textContent = fav?"♥":"♡";
+        el.setAttribute("aria-pressed", fav);
     }
 }
 
