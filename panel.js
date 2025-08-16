@@ -3,7 +3,7 @@ const table = document.getElementById("propTable");
 const modal = document.getElementById("viewModal");
 
 // ====== URL DE TU GOOGLE WEB APP ======
-const WEB_APP_PROPS = "https://script.google.com/macros/s/AKfycbxQMwZOuBUAjIwR2ZyC2r7DlIz78AxG6iMz3yRmI_TDuIbkDiKEwB_IsuaV0atWlVDS/exec"; // <-- reemplaza con tu URL real
+const WEB_APP_PROPS = "https://script.google.com/macros/s/AKfycbxQMwZOuBUAjIwR2ZyC2r7DlIz78AxG6iMz3yRmI_TDuIbkDiKEwB_IsuaV0atWlVDS/exec";
 
 function loadProps(){
     const props = JSON.parse(localStorage.getItem("panelProps")||"[]");
@@ -46,7 +46,6 @@ form.addEventListener("submit", async e=>{
 
     // ===== Publicar en Google Sheet =====
     try {
-        // Asegurar que Airbnb tenga valor
         if(!fd.has("Airbnb")) fd.append("Airbnb","false");
         const res = await fetch(WEB_APP_PROPS, { method:"POST", body:fd });
         const json = await res.json();
@@ -96,7 +95,6 @@ table.addEventListener("click", e=>{
         form.img.value = p.img;
         form.desc.value = p.desc;
 
-        // Borrar la propiedad antigua al guardar
         props = props.filter(x=>x.id!==id);
         localStorage.setItem("panelProps", JSON.stringify(props));
     }
