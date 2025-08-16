@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel de Propiedades</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="section container">
+  <h1 class="section-head">Panel de Administración</h1>
+
+  <!-- Formulario para agregar propiedades -->
+  <form id="propForm" class="contact">
+    <div class="row">
+      <label>Título <input type="text" name="titulo" required></label>
+      <label>Ciudad <input type="text" name="ciudad" required></label>
+    </div>
+    <div class="row">
+      <label>Tipo 
+        <select name="tipo" required>
+          <option value="">Tipo</option>
+          <option value="Casa">Casa</option>
+          <option value="Departamento">Departamento</option>
+          <option value="Oficina">Oficina</option>
+        </select>
+      </label>
+      <label>Operación 
+        <select name="operacion" required>
+          <option value="">Operación</option>
+          <option value="venta">Venta</option>
+          <option value="renta">Renta</option>
+        </select>
+      </label>
+    </div>
+    <div class="row">
+      <label>Recámaras <input type="number" name="recamaras" required></label>
+      <label>Baños <input type="number" name="banos" required></label>
+      <label>Metros cuadrados <input type="number" name="m2" required></label>
+      <label>Precio <input type="number" name="precio" required></label>
+    </div>
+    <div class="check">
+      <label><input type="checkbox" name="nueva" value="true"> Nueva</label>
+      <label><input type="checkbox" name="lujo" value="true"> Lujo</label>
+      <label><input type="checkbox" name="Airbnb" value="true"> Airbnb</label>
+    </div>
+    <label>URL de imagen <input type="url" name="img" required></label>
+    <label>Descripción <textarea name="desc" required></textarea></label>
+    <button type="submit" class="btn-primary">Guardar propiedad</button>
+  </form>
+
+  <!-- Tabla de propiedades existentes -->
+  <section class="section">
+    <h2 class="section-head">Propiedades existentes</h2>
+    <div id="propTable" class="grid"></div>
+  </section>
+
+  <!-- Modal de vista rápida -->
+  <dialog id="viewModal" class="modal">
+    <div class="modal-card">
+      <button class="modal-close">✖</button>
+      <div class="modal-media"><img id="viewImg" src="" alt=""></div>
+      <div class="modal-body">
+        <h3 id="viewTitulo"></h3>
+        <p id="viewUbicacion" class="muted"></p>
+        <div id="viewBadges" class="badges"></div>
+        <p id="viewDesc"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="panel.js"></script>
+</body>
+</html>

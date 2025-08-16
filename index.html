@@ -5,155 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GamaHN — Bienes Raíces</title>
   <meta name="description" content="Compra, vende o renta tu próxima propiedad con GamaHN. Encuentra casas, departamentos, oficinas y más." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='%23000' d='M24 136L128 48l104 88v80a8 8 0 0 1-8 8h-64v-56H96v56H32a8 8 0 0 1-8-8z'/%3E%3C/svg%3E">
 </head>
 <body>
+
   <!-- Navbar -->
   <header class="nav">
-    <a class="brand" href="#home" aria-label="GamaHN">
-      <svg width="28" height="28" viewBox="0 0 256 256" aria-hidden="true"><path d="M24 136L128 48l104 88v80a8 8 0 0 1-8 8h-64v-56H96v56H32a8 8 0 0 1-8-8z" /></svg>
-      <span>Gama <b>HN</b></span>
-    </a>
-
+    <a class="brand" href="#home">GamaHN</a>
     <nav class="nav-links">
       <a href="#propiedades">Propiedades</a>
       <a href="#servicios">Servicios</a>
-      <a href="#testimonios">Testimonios</a>
       <a href="#contacto">Contacto</a>
-      <button class="btn-outline" id="toggle-theme" aria-label="Cambiar tema">🌓</button>
-      <a href="#propiedades" class="btn-primary">Explorar</a>
+      <button id="toggle-theme">🌓</button>
     </nav>
-
-    <button class="nav-toggle" aria-label="Abrir menú" id="navToggle">☰</button>
+    <button id="navToggle" class="nav-toggle">☰</button>
   </header>
 
   <!-- Hero -->
   <section id="home" class="hero">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="hero-content container">
-      <h1><span class="accent">Encuentra</span> tu próximo hogar</h1>
-      <p>Compra, vende o renta con expertos. Listados verificados, asesoría personalizada y cierre sin estrés.</p>
-
-      <!-- Buscador rápido -->
+    <div class="hero-content">
+      <h1>Encuentra tu próximo hogar</h1>
+      <p>Compra, vende o renta con expertos.</p>
       <form id="buscador" class="search">
-        <input type="text" id="q" placeholder="Ciudad, colonia o código postal" aria-label="Buscar por ubicación" />
-        <select id="tipo" aria-label="Tipo de propiedad">
+        <input type="text" id="q" placeholder="Ciudad o título">
+        <select id="tipo">
           <option value="">Tipo</option>
           <option value="Casa">Casa</option>
           <option value="Departamento">Departamento</option>
           <option value="Oficina">Oficina</option>
         </select>
-        <select id="precio" aria-label="Rango de precio">
+        <select id="precio">
           <option value="">Precio</option>
           <option value="0-100000">Hasta L.100k</option>
           <option value="100000-300000">L.100k – L.300k</option>
           <option value="300000-600000">L.300k – L.600k</option>
           <option value="600000-9999999">L.600k +</option>
         </select>
-        <select id="recamaras" aria-label="Recámaras">
+        <select id="recamaras">
           <option value="">Recámaras</option>
           <option value="1">1+</option>
           <option value="2">2+</option>
           <option value="3">3+</option>
           <option value="4">4+</option>
         </select>
-        <button class="btn-primary" type="submit">Buscar</button>
+        <button type="submit" class="btn-primary">Buscar</button>
       </form>
-
-      <div class="kpis">
-        <div class="kpi"><span id="kpi-listados">150+</span><small>Propiedades activas</small></div>
-        <div class="kpi"><span>24h</span><small>Respuesta promedio</small></div>
-        <div class="kpi"><span>4.9★</span><small>Satisfacción</small></div>
-      </div>
     </div>
-    <a href="#propiedades" class="hero-scroll" aria-label="Ir a propiedades">▼</a>
   </section>
 
   <!-- Propiedades -->
   <section id="propiedades" class="section container">
-    <header class="section-head">
-      <h2>Propiedades destacadas</h2>
-      <p class="muted">Explora listados verificados. Usa los filtros para afinar tu búsqueda.</p>
-    </header>
-
+    <h2 class="section-head">Propiedades destacadas</h2>
     <div id="filtrosSecundarios" class="filters">
       <button class="chip active" data-chip="todas">Todas</button>
       <button class="chip" data-chip="venta">En venta</button>
       <button class="chip" data-chip="renta">En renta</button>
-      <button class="chip" data-chip="nueva">Construcción nueva</button>
+      <button class="chip" data-chip="nueva">Nueva</button>
       <button class="chip" data-chip="lujo">Lujo</button>
-    </div>
+      <div class="chip" data-chip="airbnb">Airbnb</div>
 
-    <div id="grid" class="grid" aria-live="polite" aria-busy="false">
-      <!-- Tarjetas generadas por JS -->
     </div>
-
-    <div id="paginacion" class="pagination" hidden>
-      <button class="btn-outline" data-page="prev">Anterior</button>
-      <span class="page-label">Página <b id="pageCur">1</b> de <b id="pageMax">1</b></span>
-      <button class="btn-outline" data-page="next">Siguiente</button>
+    <div id="grid" class="grid"></div>
+    <div id="paginacion" class="form-actions" hidden>
+      <button data-page="prev" class="btn-outline">Anterior</button>
+      <span>Página <b id="pageCur">1</b> de <b id="pageMax">1</b></span>
+      <button data-page="next" class="btn-outline">Siguiente</button>
     </div>
   </section>
 
-  <!-- Servicios -->
-  <section id="servicios" class="section alt">
-    <div class="container">
-      <header class="section-head">
-        <h2>Servicios integrales</h2>
-        <p class="muted">Desde la tasación hasta el cierre, te acompañamos en cada paso.</p>
-      </header>
-
-      <div class="services">
-        <article class="card service">
-          <div class="icon">🏠</div>
-          <h3>Compra y venta</h3>
-          <p>Negociación experta, visitas guiadas y análisis comparativo de mercado.</p>
-        </article>
-        <article class="card service">
-          <div class="icon">🧾</div>
-          <h3>Gestión legal</h3>
-          <p>Revisión de títulos, contratos y trámites ante notaría.</p>
-        </article>
-        <article class="card service">
-          <div class="icon">💸</div>
-          <h3>Crédito hipotecario</h3>
-          <p>Precalificación y vinculación con bancos para mejores tasas.</p>
-        </article>
-        <article class="card service">
-          <div class="icon">🎯</div>
-          <h3>Marketing inmobiliario</h3>
-          <p>Tour virtual, fotografía profesional y campañas multicanal.</p>
-        </article>
+  <!-- Modal -->
+  <dialog id="detalleModal" class="modal">
+    <div class="modal-card">
+      <button class="modal-close">✖</button>
+      <div class="modal-media"><img id="modalImg" src="" alt=""></div>
+      <div class="modal-body">
+        <h3 id="modalTitulo"></h3>
+        <p id="modalUbicacion" class="muted"></p>
+        <div id="modalBadges" class="badges"></div>
+        <p id="modalDesc"></p>
+        <div class="modal-actions">
+          <a id="btnContactar" href="#contacto" class="btn-primary">Contactar</a>
+          <button id="btnFav" class="btn-fav" aria-pressed="false">♡</button>
+        </div>
       </div>
     </div>
-  </section>
-
-  <!-- Testimonios -->
-  <section id="testimonios" class="section container">
-    <header class="section-head">
-      <h2>Historias reales</h2>
-      <p class="muted">Clientes que encontraron su lugar favorito.</p>
-    </header>
-
-    <div class="testimonials">
-      <figure class="testimonial card">
-        <blockquote>“Cerramos en tiempo récord y sin sorpresas. Excelente equipo.”</blockquote>
-        <figcaption>— Daniela R.</figcaption>
-      </figure>
-      <figure class="testimonial card">
-        <blockquote>“El tour virtual nos ahorró semanas. ¡Súper recomendado!”</blockquote>
-        <figcaption>— Luis y Mar</figcaption>
-      </figure>
-      <figure class="testimonial card">
-        <blockquote>“Encontraron justo lo que buscaba dentro de mi presupuesto.”</blockquote>
-        <figcaption>— Óscar A.</figcaption>
-      </figure>
-    </div>
-  </section>
+  </dialog>
 
   <!-- Contacto -->
   <section id="contacto" class="section alt">
@@ -183,55 +119,75 @@
 
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2025 GamaHN. Todos los derechos reservados.</p>
+      <p>&copy; <span id="year"></span> GamaHN. Todos los derechos reservados.</p>
     </div>
   </footer>
-<script>
-const form = document.getElementById('contactForm');
-const formSuccess = document.getElementById('formSuccess');
 
-// Pega aquí la URL de tu Web App de Google Apps Script
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx_eilV5-EXm4f43wWjmoY4RCqzmG36RtwbSRepHo1ombDq0_mxqKrWcP3x42pWicei/exec";
+  <!-- JS del formulario y año actual -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Año actual en footer
+      document.getElementById('year').textContent = new Date().getFullYear();
 
-form.addEventListener('submit', async e => {
-  e.preventDefault();
+      // Formulario
+      const form = document.getElementById('contactForm');
+      const formSuccess = document.getElementById('formSuccess');
 
-  const nombre = form.nombre.value.trim();
-  const email = form.email.value.trim();
-  const mensaje = form.mensaje.value.trim();
+      // URL de tu Web App de Google Apps Script
+      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwONwjTcP1ZuM5hEIozEj5jfoLA_y4am-wT8pb91Jy5eCl-bDQUmfDIvixp_zO7yXqs/exec";
 
-  if (!nombre || !email || !mensaje) {
-    alert("Por favor completa todos los campos.");
-    return;
-  }
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
 
-  // Preparamos los datos para enviar
-  const data = new FormData();
-  data.append("nombre", nombre);
-  data.append("email", email);
-  data.append("mensaje", mensaje);
+        const nombre = form.nombre.value.trim();
+        const email = form.email.value.trim();
+        const mensaje = form.mensaje.value.trim();
 
-  try {
-    const response = await fetch(WEB_APP_URL, {
-      method: "POST",
-      body: data
+        if (!nombre || !email || !mensaje) {
+          alert("Por favor completa todos los campos.");
+          return;
+        }
+
+        const data = new FormData();
+        data.append("nombre", nombre);
+        data.append("email", email);
+        data.append("mensaje", mensaje);
+
+        try {
+          const response = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: data
+          });
+          const result = await response.json();
+
+          if (result.status === "success") {
+            form.reset();
+            formSuccess.hidden = false;
+            setTimeout(() => formSuccess.hidden = true, 3000);
+          } else {
+            alert("Error al enviar: " + result.message);
+          }
+        } catch (error) {
+          console.error(error);
+          alert("No se pudo enviar el mensaje. Intenta de nuevo.");
+        }
+      });
     });
+  </script>
 
-    const result = await response.json();
+  <footer class="footer">
+    <div class="container subfooter">
+      <span>&copy; <span id="year"></span> GamaHN. Todos los derechos reservados.</span>
+    </div>
+  </footer>
 
-    if (result.status === "success") {
-      form.reset();
-      formSuccess.hidden = false;
-      setTimeout(() => formSuccess.hidden = true, 3000);
-    } else {
-      alert("Error al enviar: " + result.message);
-    }
-
-  } catch (error) {
-    console.error(error);
-    alert("No se pudo enviar el mensaje. Intenta de nuevo.");
-  }
-});
-</script>
+  <script src="app.js"></script>
+  <script>
+    // Cargar propiedades desde panel
+    const panelProps = JSON.parse(localStorage.getItem("panelProps") || "[]");
+    panelProps.forEach(p => PROPS.push(p));
+    applyFilters();
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
