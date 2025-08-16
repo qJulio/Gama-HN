@@ -23,7 +23,7 @@ const formatMoney = v => (v >= 10000 ? `$${v.toLocaleString()}` : `$${v}`);
 // ==== Cargar propiedades desde Google Sheets ====
 async function loadPropsFromSheet() {
     try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbxQMwZOuBUAjIwR2ZyC2r7DlIz78AxG6iMz3yRmI_TDuIbkDiKEwB_IsuaV0atWlVDS/exec"); 
+        const res = await fetch("https://script.google.com/macros/s/AKfycbyYijeUbcNPZZKhXhL-E3vWntiOAICo_WP4842HcBLoY3duu155YN0jVvSfBmiHz58/exec"); 
         const data = await res.json();
         // Mapear columnas a objetos
         state.PROPS = data.map(p => ({

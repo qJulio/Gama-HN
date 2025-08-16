@@ -3,7 +3,7 @@ const table = document.getElementById("propTable");
 const modal = document.getElementById("viewModal");
 
 // ====== URL DE TU GOOGLE WEB APP ======
-const WEB_APP_PROPS = "https://script.google.com/macros/s/AKfycbxQMwZOuBUAjIwR2ZyC2r7DlIz78AxG6iMz3yRmI_TDuIbkDiKEwB_IsuaV0atWlVDS/exec";
+const WEB_APP_PROPS = "https://script.google.com/macros/s/AKfycbyYijeUbcNPZZKhXhL-E3vWntiOAICo_WP4842HcBLoY3duu155YN0jVvSfBmiHz58/exec";
 
 function loadProps(){
     const props = JSON.parse(localStorage.getItem("panelProps")||"[]");
