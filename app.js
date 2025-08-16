@@ -24,7 +24,7 @@ const modal=$("#detalleModal");
 const formatMoney=v=>(v>=10000?`$${v.toLocaleString()}`:`$${v}`);
 
 // ==== URL de tu Google Sheets Web App ====
-const SHEETS_URL = "https://script.google.com/macros/s/AKfycbxAylI_RZchCNT5Igb9i9uJCS6zdUPnlc3PoNcXSAItL5rSKimNaXT2MwLFHes97v3Q/exec";
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbxQMwZOuBUAjIwR2ZyC2r7DlIz78AxG6iMz3yRmI_TDuIbkDiKEwB_IsuaV0atWlVDS/exec";
 
 // ==== Cargar propiedades desde Google Sheets ====
 async function loadPropsFromSheet(){
