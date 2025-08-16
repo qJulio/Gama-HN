@@ -44,21 +44,34 @@ form.addEventListener("submit", async e=>{
     localStorage.setItem("panelProps", JSON.stringify(stored));
     loadProps();
 
-    // ===== Publicar en Google Sheet =====
-    try {
-        if(!fd.has("Airbnb")) fd.append("Airbnb","false");
-        const res = await fetch(WEB_APP_PROPS, { method:"POST", body:fd });
-        const json = await res.json();
-        if(json.status==="success"){
-            alert("Propiedad publicada para todos!");
-            form.reset();
-        } else {
-            alert("Error al publicar: "+json.message);
-        }
-    } catch(err){
-        console.error(err);
-        alert("Error al publicar, intenta de nuevo.");
+// ===== Publicar en Google Sheet =====
+try {
+    // Crear objeto con los datos
+    const dataObj = {};
+    fd.forEach((v,k)=>{
+        dataObj[k] = v;
+    });
+    if(!("Airbnb" in dataObj)) dataObj.Airbnb = "FALSE";
+
+    // Convertir a URLSearchParams para enviar correctamente
+    const params = new URLSearchParams(dataObj);
+
+    const res = await fetch(WEB_APP_PROPS, {
+        method: "POST",
+        body: params
+    });
+    const json = await res.json();
+    if(json.status==="success"){
+        alert("Propiedad publicada para todos!");
+        form.reset();
+    } else {
+        alert("Error al publicar: "+json.message);
     }
+} catch(err){
+    console.error(err);
+    alert("Error al publicar, intenta de nuevo.");
+}
+
 });
 
 // Acciones Ver, Editar, Borrar
