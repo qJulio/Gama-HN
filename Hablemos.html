@@ -1,75 +1,114 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hablemos - Panel de Clientes</title>
-<style>
-  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4; }
-  header { background:#333; color:#fff; padding:1rem; text-align:center; }
-  main { padding:1rem; max-width:900px; margin:0 auto; }
-  h1 { margin-bottom:1rem; }
-  form { background:#fff; padding:1rem; border-radius:5px; margin-bottom:2rem; box-shadow:0 2px 5px rgba(0,0,0,.1);}
-  form input, form textarea { width:100%; padding:.5rem; margin-bottom:1rem; border:1px solid #ccc; border-radius:3px; }
-  form button { padding:.5rem 1rem; background:#333; color:#fff; border:none; border-radius:3px; cursor:pointer; }
-  form button:hover { background:#555; }
-  .msg-list { list-style:none; padding:0; }
-  .msg-list li { background:#fff; padding:1rem; margin-bottom:1rem; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,.1); position: relative; }
-  .msg-list li span { display:block; font-weight:bold; margin-bottom:.5rem; }
-  .msg-list li small { display:block; color:#666; font-size:.85rem; margin-bottom:.5rem; }
-  .btn-borrar { position: absolute; top:1rem; right:1rem; padding:0.3rem 0.6rem; background:#e74c3c; color:#fff; border:none; border-radius:3px; cursor:pointer; }
-  .btn-borrar:hover { background:#c0392b; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mensajes Recibidos</title>
+  <link rel="stylesheet" href="hablemos.css" />
 </head>
 <body>
 
 <header>
-  <h1>Panel de Mensajes - Hablemos</h1>
+  <h1>Mensajes Recibidos</h1>
 </header>
 
-<main>
-  <h2>Mensajes recibidos:</h2>
-  <ul id="msgList" class="msg-list"></ul>
-</main>
+<section class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="messagesBody">
+      <!-- Mensajes se cargan aquí -->
+    </tbody>
+  </table>
+</section>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">X</button>
+    <div class="modal-body" id="modalBody">
+      <!-- Contenido del mensaje -->
+    </div>
+  </div>
+</div>
 
 <script>
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxruWsZMKc0VimmxhYuIQBxAgwFhhcQdey7FqymujApdURavXSbz1ikQf9DAoxS3gjG/exec"; // misma URL que usaste en index.html
-  const msgList = document.getElementById('msgList');
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz8BGx1s-JNZVE4gmHi3fDltzKQ76m8BwDuEeGiJPaPtgauKNqwBO8IIhSS71CWHNAr/exec"; 
+const messagesBody = document.getElementById("messagesBody");
+const modal = document.getElementById("modal");
+const modalBody = document.getElementById("modalBody");
+const modalClose = document.getElementById("modalClose");
 
-  // Función para renderizar mensajes
-  function renderMensajes(mensajes) {
-    msgList.innerHTML = '';
-    if (mensajes.length === 0) {
-      msgList.innerHTML = '<li>No hay mensajes.</li>';
-      return;
-    }
+let currentMessageId = null;
 
-    mensajes.forEach((m, i) => {
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <span>${m.nombre}</span>
-        <small>${m.email}</small>
-        <small>Fecha: ${m.fecha}</small>
-        <p>${m.mensaje}</p>
+// Cargar mensajes
+async function loadMessages(){
+  try{
+    const res = await fetch(WEB_APP_URL);
+    const data = await res.json();
+    messagesBody.innerHTML = "";
+
+    data.forEach(msg=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${msg.nombre}</td>
+        <td>${msg.email}</td>
+        <td>
+          <button class="delete-btn" data-id="${msg.id}">Borrar</button>
+        </td>
       `;
-      msgList.appendChild(li);
+      // Abrir modal al hacer click en nombre/email
+      tr.querySelector("td:first-child").addEventListener("click", ()=> openModal(msg));
+      tr.querySelector("td:nth-child(2)").addEventListener("click", ()=> openModal(msg));
+      // Borrar mensaje
+      tr.querySelector(".delete-btn").addEventListener("click", async (e)=>{
+        e.stopPropagation();
+        if(!confirm("¿Seguro quieres borrar este mensaje?")) return;
+        try{
+          const res = await fetch(`${WEB_APP_URL}?deleteId=${msg.id}`);
+          const result = await res.json();
+          if(result.status==="success"){
+            alert(result.message);
+            loadMessages();
+          } else {
+            alert("Error: "+result.message);
+          }
+        }catch(err){
+          console.error(err);
+          alert("Error borrando mensaje.");
+        }
+      });
+      messagesBody.appendChild(tr);
     });
+  }catch(e){
+    console.error("Error cargando mensajes:", e);
   }
+}
 
-  // Función para obtener mensajes desde Google Sheets
-  async function fetchMensajes() {
-    try {
-      const response = await fetch(WEB_APP_URL + "?action=get");
-      const mensajes = await response.json();
-      renderMensajes(mensajes);
-    } catch (error) {
-      console.error("Error al cargar los mensajes:", error);
-      msgList.innerHTML = '<li>No se pudieron cargar los mensajes.</li>';
-    }
-  }
+// Abrir modal
+function openModal(msg){
+  currentMessageId = msg.id;
+  modalBody.innerHTML = `
+    <p><strong>ID:</strong> ${msg.id}</p>
+    <p><strong>Nombre:</strong> ${msg.nombre}</p>
+    <p><strong>Email:</strong> ${msg.email}</p>
+    <p><strong>Mensaje:</strong> ${msg.mensaje}</p>
+  `;
+  modal.style.display = "flex";
+}
 
-  // Llamar a la función al cargar la página
-  fetchMensajes();
+// Cerrar modal
+modalClose.addEventListener("click", ()=> modal.style.display="none");
+
+// Auto refresco cada 5 segundos
+setInterval(loadMessages, 5000);
+document.addEventListener("DOMContentLoaded", loadMessages);
 </script>
+
 </body>
 </html>

@@ -63,7 +63,6 @@
       <button class="chip" data-chip="nueva">Nueva</button>
       <button class="chip" data-chip="lujo">Lujo</button>
       <div class="chip" data-chip="airbnb">Airbnb</div>
-
     </div>
     <div id="grid" class="grid"></div>
     <div id="paginacion" class="form-actions" hidden>
@@ -112,7 +111,7 @@
           <textarea name="mensaje" rows="4" required></textarea>
         </label>
         <button type="submit" class="btn-primary">Enviar</button>
-        <p id="formSuccess" class="success" hidden>Mensaje enviado. Gracias por contactarnos.</p>
+        <p id="formSuccess" class="success" hidden>Mensaje enviado. Gracias.</p>
       </form>
     </div>
   </section>
@@ -123,71 +122,57 @@
     </div>
   </footer>
 
-  <!-- JS del formulario y año actual -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Año actual en footer
-      document.getElementById('year').textContent = new Date().getFullYear();
+  <!-- Script del formulario de contacto -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-      // Formulario
-      const form = document.getElementById('contactForm');
-      const formSuccess = document.getElementById('formSuccess');
+  const form = document.getElementById('contactForm');
+  const formSuccess = document.getElementById('formSuccess');
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwHnhYKVtDzQbkuOCKZdbzP7QOgg-wMQSpYHA3VVvacCzby7eKrw2Xx0U6n_6MI67U9/exec";
 
-      // URL de tu Web App de Google Apps Script
-      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwONwjTcP1ZuM5hEIozEj5jfoLA_y4am-wT8pb91Jy5eCl-bDQUmfDIvixp_zO7yXqs/exec";
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
 
-      form.addEventListener('submit', async e => {
-        e.preventDefault();
+    const nombre = form.nombre.value.trim();
+    const email = form.email.value.trim();
+    const mensaje = form.mensaje.value.trim();
 
-        const nombre = form.nombre.value.trim();
-        const email = form.email.value.trim();
-        const mensaje = form.mensaje.value.trim();
+    if (!nombre || !email || !mensaje) {
+      alert("Por favor completa todos los campos.");
+      return;
+    }
 
-        if (!nombre || !email || !mensaje) {
-          alert("Por favor completa todos los campos.");
-          return;
-        }
+    try {
+      const formData = new FormData();
+      formData.append("nombre", nombre);
+      formData.append("email", email);
+      formData.append("mensaje", mensaje);
 
-        const data = new FormData();
-        data.append("nombre", nombre);
-        data.append("email", email);
-        data.append("mensaje", mensaje);
-
-        try {
-          const response = await fetch(WEB_APP_URL, {
-            method: "POST",
-            body: data
-          });
-          const result = await response.json();
-
-          if (result.status === "success") {
-            form.reset();
-            formSuccess.hidden = false;
-            setTimeout(() => formSuccess.hidden = true, 3000);
-          } else {
-            alert("Error al enviar: " + result.message);
-          }
-        } catch (error) {
-          console.error(error);
-          alert("No se pudo enviar el mensaje. Intenta de nuevo.");
-        }
+      const response = await fetch(WEB_APP_URL, {
+        method: "POST",
+        body: formData
       });
-    });
-  </script>
 
-  <footer class="footer">
-    <div class="container subfooter">
-      <span>&copy; <span id="year"></span> GamaHN. Todos los derechos reservados.</span>
-    </div>
-  </footer>
+      const result = await response.json();
+
+      if(result.status==="success"){
+        form.reset();
+        formSuccess.hidden = false;
+        formSuccess.textContent = `¡Perfecto! Hemos recibido tu mensaje y te responderemos lo más rápido posible.`;
+        setTimeout(()=>formSuccess.hidden=true,5000);
+      } else {
+        alert("Error al enviar: "+(result.message||"Desconocido"));
+      }
+
+    } catch(err){
+      console.error(err);
+      alert("No se pudo enviar el mensaje. Intenta de nuevo.");
+    }
+  });
+});
+</script>
 
   <script src="app.js"></script>
-  <script>
-    // Cargar propiedades desde panel
-    const panelProps = JSON.parse(localStorage.getItem("panelProps") || "[]");
-    panelProps.forEach(p => PROPS.push(p));
-    applyFilters();
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
